@@ -50,7 +50,7 @@ dotnet_diagnostic.CA1712.severity=warning
 #Идентификаторы должны иметь правильные префиксы
 dotnet_diagnostic.CA1715.severity=warning
 #Имена свойств не должны совпадать с именами методов get
-dotnet_diagnostic.CA1721.severity=warning
+dotnet_diagnostic.CA1721.severity=suggestion
 #Имена типов не должны совпадать с пространствами имен
 dotnet_diagnostic.CA1724.severity=warning
 #По возможности используйте литералы
@@ -64,20 +64,20 @@ dotnet_diagnostic.CA3002.severity=warning
 #Проверьте код на наличие уязвимостей к раскрытию информации
 dotnet_diagnostic.CA3004.severity=warning
 #Присвоение метки ValidateAntiForgeryToken обработчикам команд
-dotnet_diagnostic.CA3147.severity=warning
+dotnet_diagnostic.CA3147.severity=suggestion
 #Проверьте неиспользуемые параметры
 dotnet_diagnostic.CA1801.severity=warning
 #Свойства, возвращающие коллекции, должны быть доступными только для чтения
 dotnet_diagnostic.CA2227.severity=suggestion
-#не назначайте свойство самому себе
+#Не назначайте свойство самому себе
 dotnet_diagnostic.CA2245.severity=warning
 
 # Правила, касающиеся ненужного кода
 #Упростить имя
-dotnet_diagnostic.IDE0001.severity=warning
+dotnet_diagnostic.IDE0001.severity=suggestion
 #Упрощение доступа для элементов
 dotnet_diagnostic.IDE0002.severity=warning
-#Упрощение доступа для элементов
+#Удаление ненужных операций приведения
 dotnet_diagnostic.IDE0004.severity=warning
 #Удаление ненужных операций импорта
 dotnet_diagnostic.IDE0005.severity=warning
@@ -91,6 +91,7 @@ dotnet_diagnostic.IDE0110.severity=warning
 ###############################
 #        Code Quality         #
 ###############################
+#Проверьте аргументы или открытые методы
 dotnet_code_quality.CA1062.null_check_validation_methods = Validate
 
 ###############################
@@ -133,15 +134,55 @@ csharp_style_implicit_object_creation_when_type_is_apparent = false
 ###############################
 # Naming Conventions          #
 ###############################
-# Style Definitions
-dotnet_naming_style.pascal_case_style.capitalization             = pascal_case
-# Use PascalCase for constant fields
-dotnet_naming_rule.constant_fields_should_be_pascal_case.severity = suggestion
-dotnet_naming_rule.constant_fields_should_be_pascal_case.symbols  = constant_fields
-dotnet_naming_rule.constant_fields_should_be_pascal_case.style    = pascal_case_style
-dotnet_naming_symbols.constant_fields.applicable_kinds            = field
-dotnet_naming_symbols.constant_fields.applicable_accessibilities  = *
-dotnet_naming_symbols.constant_fields.required_modifiers          = const
+#Styles
+dotnet_naming_style.all_upper_case_style.capitalization = all_upper
+dotnet_naming_style.camel_case_style.capitalization = camel_case
+dotnet_naming_style.pascal_case_style.capitalization = pascal_case
+# Fields in camelCase with prefix _
+dotnet_naming_symbols.fields.applicable_kinds = field
+dotnet_naming_style.field_style.capitalization = camel_case
+dotnet_naming_style.field_style.required_prefix = _
+dotnet_naming_rule.fields_must_be_camel_case.symbols = fields
+dotnet_naming_rule.fields_must_be_camel_case.style = field_style
+dotnet_naming_rule.fields_must_be_camel_case.severity = warning
+# Constants in UPPER_CASE
+dotnet_naming_symbols.constants.applicable_kinds = field
+dotnet_naming_symbols.constants.required_modifiers = const
+dotnet_naming_style.constant_style.capitalization = all_upper
+dotnet_naming_style.constant_style.word_separator = _
+dotnet_naming_rule.constants_must_be_upper_case.symbols = constants
+dotnet_naming_rule.constants_must_be_upper_case.style = constant_style
+dotnet_naming_rule.constants_must_be_upper_case.severity = warning
+# Properties in PascalCase
+dotnet_naming_symbols.properties.applicable_kinds = property
+dotnet_naming_rule.properties_must_be_pascal_case.symbols = properties
+dotnet_naming_rule.properties_must_be_pascal_case.style = pascal_case_style
+dotnet_naming_rule.properties_must_be_pascal_case.severity = warning
+# Methods in PascalCase
+dotnet_naming_symbols.methods.applicable_kinds = method
+dotnet_naming_rule.methods_must_be_pascal_case.symbols = methods
+dotnet_naming_rule.methods_must_be_pascal_case.style = pascal_case_style
+dotnet_naming_rule.methods_must_be_pascal_case.severity = warning
+# Async Methods ends with 'Async'
+dotnet_naming_symbols.async_methods.applicable_kinds = method
+dotnet_naming_symbols.async_methods.required_modifiers = async
+dotnet_naming_style.async_method_style.capitalization = pascal_case
+dotnet_naming_style.async_method_style.required_suffix = Async
+dotnet_naming_rule.async_methods_must_end_with_async.symbols = async_methods
+dotnet_naming_rule.async_methods_must_end_with_async.style = async_method_style
+dotnet_naming_rule.async_methods_must_end_with_async.severity = warning
+# Classes in PascalCase
+dotnet_naming_symbols.classes.applicable_kinds = class
+dotnet_naming_rule.classes_must_be_pascal_case.symbols = classes
+dotnet_naming_rule.classes_must_be_pascal_case.style = pascal_case_style
+dotnet_naming_rule.classes_must_be_pascal_case.severity = warning
+# Interfaces starts with 'I' prefix
+dotnet_naming_symbols.interfaces.applicable_kinds = interface
+dotnet_naming_style.interface_style.capitalization = pascal_case
+dotnet_naming_style.interface_style.required_prefix = I
+dotnet_naming_rule.interfaces_must_start_with_I.symbols = interfaces
+dotnet_naming_rule.interfaces_must_start_with_I.style = interface_style
+dotnet_naming_rule.interfaces_must_start_with_I.severity = warning
 
 ###############################
 # C# Coding Conventions       #
@@ -150,7 +191,7 @@ dotnet_naming_symbols.constant_fields.required_modifiers          = const
 # var preferences
 csharp_style_var_for_built_in_types = true:silent
 csharp_style_var_when_type_is_apparent = true:silent
-csharp_style_var_elsewhere = true:silent
+csharp_style_var_elsewhere = false:warning
 # Expression-bodied members
 csharp_style_expression_bodied_methods = true:silent
 csharp_style_expression_bodied_constructors = false:silent
@@ -170,7 +211,7 @@ csharp_style_conditional_delegate_call = true:suggestion
 # Code block preferences
 csharp_prefer_simple_using_statement = false
 # Modifier preferences
-csharp_preferred_modifier_order = public,private,protected,internal,static,extern,new,virtual,abstract,sealed,override,readonly,unsafe,volatile,async:suggestion
+csharp_preferred_modifier_order = public,private,protected,internal,static,extern,new,virtual,abstract,sealed,override,readonly,unsafe,volatile,async:warning
 # Expression-level preferences
 csharp_prefer_braces = true
 csharp_style_deconstructed_variable_declaration = true:suggestion
